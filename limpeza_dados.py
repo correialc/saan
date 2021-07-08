@@ -5,17 +5,10 @@ class LimpezaDados:
 
     df_seg = []
 
-    def __init__(self):
+    def __init__(self, df_seg):
         logging.basicConfig(level=logging.INFO)
-        logging.info('Carregando dados de segmentos...')
-        colunas = ['id_ato', 'data_pub', 'tipo_ato', 'id_seg', 'tipo_seg', 'txt_seg']
-        self.df_seg = pd.read_csv('./datasets/extracao-segmentos-atos.csv', 
-                            delimiter='|', names=colunas, quotechar="'")
-        logging.info('{0} registros carregados.'.format(self.df_seg['id_seg'].count()))
+        self.df_seg = df_seg
     
     def executar(self):
         logging.info('Etapa limpeza dados...')
-
-if __name__ == '__main__':
-    limp = LimpezaDados()
-    limp.executar()
+        return self.df_seg
