@@ -17,7 +17,13 @@ class LimpezaDados:
         remover_tags = lambda txt : re.sub(padrao_tag_html, '', str(txt)) 
         self.df_seg['txt_seg'] = self.df_seg['txt_seg'].apply(remover_tags)
     
+    def remover_escape_html(self):
+        logging.info('Removendo caracteres de escape HTML')
+        remover_escape_chars = lambda txt : HTMLParser().unescape(txt)
+        self.df_seg['txt_seg'] = self.df_seg['txt_seg'].apply(remover_escape_chars)
+
     def executar(self):
         self.remover_tags_html()
+        self.remover_escape_html()
         logging.info('Limpeza de dados concluída.')
         return self.df_seg
