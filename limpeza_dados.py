@@ -19,6 +19,15 @@ class LimpezaDados:
         logging.info(f'{qtd_seg - qtd_seg_ade} segmentos de atos não ADE excluídos.')
         logging.info(f'Restaram {qtd_seg_ade} segmentos de atos ADE.')
     
+    def remover_segmentos_nao_representativos(self):
+        logging.info('Removendo segmentos não representativos...')
+        tipos_seg_representativos = ['Artigo', 'Não Identificado', 'Ementa', 'Fecho', 'Inciso']
+        qtd_seg = self.df_seg['id_seg'].count()
+        qtd_seg_rep = self.df_seg['tipo_seg'].isin(tipos_seg_representativos).sum()
+        self.df_seg = self.df_seg[self.df_seg['tipo_seg'].isin(tipos_seg_representativos)]
+        logging.info(f'{qtd_seg - qtd_seg_rep} segmentos não representativos excluídos.')
+        logging.info(f'Restaram {qtd_seg_rep} segmentos representativos.')
+
     def remover_tags_html(self):
         logging.info('Removendo tags HTML...')
         padrao_tag_html = re.compile('<.*?>')
@@ -32,6 +41,7 @@ class LimpezaDados:
 
     def executar(self):
         self.remover_segmentos_nao_ade()
+        self.remover_segmentos_nao_representativos()
         self.remover_tags_html()
         self.remover_escape_html()
         logging.info('Limpeza de dados concluída.')
