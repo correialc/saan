@@ -28,6 +28,14 @@ class LimpezaDados:
         logging.info(f'{qtd_seg - qtd_seg_rep} segmentos não representativos excluídos.')
         logging.info(f'Restaram {qtd_seg_rep} segmentos representativos.')
 
+    def remover_segmentos_nulos(self):
+        logging.info('Removendo segmentos nulos...')
+        qtd_seg = self.df_seg['id_seg'].count()
+        qtd_seg_na = self.df_seg['txt_seg'].isna().sum()
+        self.df_seg['txt_seg'] = self.df_seg[self.df_seg['txt_seg'].notna()]
+        logging.info(f'{qtd_seg_na} segmentos nulos excluídos.')
+        logging.info(f'Restaram {qtd_seg - qtd_seg_na} segmentos não nulos.')
+
     def remover_tags_html(self):
         logging.info('Removendo tags HTML...')
         padrao_tag_html = re.compile('<.*?>')
@@ -42,6 +50,7 @@ class LimpezaDados:
     def executar(self):
         self.remover_segmentos_nao_ade()
         self.remover_segmentos_nao_representativos()
+        self.remover_segmentos_nulos()
         self.remover_tags_html()
         self.remover_escape_html()
         logging.info('Limpeza de dados concluída.')
