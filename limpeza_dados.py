@@ -32,7 +32,7 @@ class LimpezaDados:
         logging.info('Removendo segmentos nulos...')
         qtd_seg = self.df_seg['id_seg'].count()
         qtd_seg_na = self.df_seg['txt_seg'].isna().sum()
-        self.df_seg['txt_seg'] = self.df_seg[self.df_seg['txt_seg'].notna()]
+        self.df_seg = self.df_seg[self.df_seg['txt_seg'].notna()]
         logging.info(f'{qtd_seg_na} segmentos nulos excluídos.')
         logging.info(f'Restaram {qtd_seg - qtd_seg_na} segmentos não nulos.')
 
