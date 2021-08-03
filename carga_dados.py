@@ -3,7 +3,6 @@ import logging
 
 class CargaDados:
 
-    dados_seg = []
     path_dados_seg=None
     cabecalho_dados_seg=None
 
@@ -14,10 +13,8 @@ class CargaDados:
         self.path_dados_seg = path_dados_seg
         self.cabecalho_dados_seg = cabecalho_dados_seg
     
-    def executar(self):
+    def executar(self, dados):
         logging.info('Carregando dados de segmentos...')
-        self.df_seg = pd.read_csv(self.path_dados_seg, delimiter='|', 
+        dados.seg_orig = pd.read_csv(self.path_dados_seg, delimiter='|', 
                                     names=self.cabecalho_dados_seg, quotechar="'")
-        logging.info('{0} registros carregados.'.format(self.df_seg['id_seg'].count()))
-
-        return self.df_seg
+        logging.info('{0} registros carregados.'.format(dados.seg_orig['id_seg'].count()))
