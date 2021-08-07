@@ -1,5 +1,6 @@
 import logging
 import spacy
+import nltk
 from string import punctuation
 
 class Preprocessamento:
@@ -8,6 +9,8 @@ class Preprocessamento:
         logging.basicConfig(level=logging.INFO)
         logging.info("Carregando modelo de Português para preprocessamento...")
         self.nlp = spacy.load('pt_core_news_sm')
+        nltk.download('stopwords')
+        self.stopwords = nltk.corpus.stopwords.words('portuguese')
                 
     def executar_pipeline_preprocessamento(self, dados):
         logging.info("Executando pipeline de preprocessamento...")
@@ -31,11 +34,17 @@ class Preprocessamento:
         sem_pontuacao = filter(lambda token : token not in punctuation, tokens)
         return list(sem_pontuacao)
 
+    def remover_stopwords(self, tokens):
+        sem_stop_words = filter(lambda token : token not in self.stopwords, tokens)
+        return list(sem_stop_words)
+
     def executar(self, dados):
         self.executar_pipeline_preprocessamento(dados)
         logging.info('Convertendo caracteres para minúsculo...')
         dados.prep['tokens'] = dados.prep['tokens'].apply(self.converter_para_minusculo)
         logging.info('Removendo pontuação...')
         dados.prep['tokens'] = dados.prep['tokens'].apply(self.remover_pontuacao)
+        logging.info('Removendo stopwords...')
+        dados.prep['tokens'] = dados.prep['tokens'].apply(self.remover_stopwords)
 
         
