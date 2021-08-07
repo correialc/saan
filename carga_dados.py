@@ -15,6 +15,6 @@ class CargaDados:
     
     def executar(self, dados):
         logging.info('Carregando dados de segmentos...')
-        dados.seg_orig = pd.read_csv(self.path_dados_seg, delimiter='|', 
+        dados.orig = pd.read_csv(self.path_dados_seg, delimiter='|', 
                                     names=self.cabecalho_dados_seg, quotechar="'")
-        logging.info('{0} registros carregados.'.format(dados.seg_orig['id_seg'].count()))
+        logging.info('{0} registros carregados.'.format(dados.orig['id_seg'].count()))
