@@ -27,8 +27,15 @@ class Preprocessamento:
         minusculo = map(str.lower, tokens)
         return list(minusculo)
 
+    def remover_pontuacao(self, tokens):
+        sem_pontuacao = filter(lambda token : token not in punctuation, tokens)
+        return list(sem_pontuacao)
+
     def executar(self, dados):
         self.executar_pipeline_preprocessamento(dados)
         logging.info('Convertendo caracteres para minúsculo...')
         dados.prep['tokens'] = dados.prep['tokens'].apply(self.converter_para_minusculo)
+        logging.info('Removendo pontuação...')
+        dados.prep['tokens'] = dados.prep['tokens'].apply(self.remover_pontuacao)
+
         
