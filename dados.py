@@ -4,3 +4,10 @@ class Dados:
         self.orig = []
         self.limp = []
         self.prep = []
+        self.treino = []
+        self.teste = []
+        self.Xtr = []
+        self.Ytr = []
+        self.Xte = []
+        self.Yte = []
+
