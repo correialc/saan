@@ -29,6 +29,9 @@ class Preprocessamento:
         tokens_stemmed = [self.stemmer.stem(token) for token in tokens]
         return tokens_stemmed
 
+    def reconstruir_texto(self, tokens):
+        return ' '.join(tokens)
+
     def executar(self, dados):
         dados.prep = dados.limp.copy()
         logging.info('Realizando tokenização...')
@@ -41,6 +44,8 @@ class Preprocessamento:
         dados.prep['tokens'] = dados.prep['tokens'].apply(self.remover_stopwords)
         logging.info('Realizando stemming...')
         dados.prep['tokens'] = dados.prep['tokens'].apply(self.extrair_stems)
+        logging.info('Reconstruindo texto a partir dos tokens...')
+        dados.prep['texto'] =dados.prep['tokens'].apply(self.reconstruir_texto)
         logging.info('Preprocessamento concluído.')
 
         
