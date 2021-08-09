@@ -10,4 +10,5 @@ class Dados:
         self.Ytr = []
         self.Xte = []
         self.Yte = []
+        self.metricas = dict()
 
