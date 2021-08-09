@@ -12,18 +12,16 @@ class Preprocessamento:
         self.stopwords = nltk.corpus.stopwords.words('portuguese')
         self.tokenizer = RegexpTokenizer(r'\w+')
         self.stemmer = SnowballStemmer('portuguese')
+        self.tam_min_token = 2
     
-    def converter_para_minusculo(self, tokens):
-        minusculo = map(str.lower, tokens)
-        return list(minusculo)
-
-    def remover_pontuacao(self, tokens):
-        sem_pontuacao = filter(lambda token : token not in punctuation, tokens)
-        return list(sem_pontuacao)
+    def remover_pontuacao(self, texto):
+        return ''.join([caractere for caractere in texto if caractere not in punctuation])
 
     def remover_stopwords(self, tokens):
-        sem_stop_words = filter(lambda token : token not in self.stopwords, tokens)
-        return list(sem_stop_words)
+        return [token for token in tokens if token not in self.stopwords]
+
+    def remover_tokens_pequenos(self, tokens):
+        return [token for token in tokens if len(token) >= self.tam_min_token]
 
     def extrair_stems(self, tokens):
         tokens_stemmed = [self.stemmer.stem(token) for token in tokens]
@@ -34,16 +32,19 @@ class Preprocessamento:
 
     def executar(self, dados):
         dados.prep = dados.limp.copy()
-        logging.info('Realizando tokenização...')
-        dados.prep['tokens'] = dados.prep['txt_seg'].apply(self.tokenizer.tokenize)
+        dados.prep['texto'] = dados.prep['txt_seg']
         logging.info('Convertendo caracteres para minúsculo...')
-        dados.prep['tokens'] = dados.prep['tokens'].apply(self.converter_para_minusculo)
+        dados.prep['texto'] = dados.prep['texto'].apply(str.lower)
         logging.info('Removendo pontuação...')
-        dados.prep['tokens'] = dados.prep['tokens'].apply(self.remover_pontuacao)
+        dados.prep['texto'] = dados.prep['texto'].apply(self.remover_pontuacao)
+        logging.info('Realizando tokenização...')
+        dados.prep['tokens'] = dados.prep['texto'].apply(self.tokenizer.tokenize)
         logging.info('Removendo stopwords...')
         dados.prep['tokens'] = dados.prep['tokens'].apply(self.remover_stopwords)
         logging.info('Realizando stemming...')
         dados.prep['tokens'] = dados.prep['tokens'].apply(self.extrair_stems)
+        logging.info(f'Removendo tokens menores que {self.tam_min_token} caracteres...')
+        dados.prep['tokens'] = dados.prep['tokens'].apply(self.remover_tokens_pequenos)
         logging.info('Reconstruindo texto a partir dos tokens...')
         dados.prep['texto'] =dados.prep['tokens'].apply(self.reconstruir_texto)
         logging.info('Preprocessamento concluído.')
