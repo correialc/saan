@@ -6,10 +6,9 @@ class ExtracaoCaracteristicas:
 
     def __init__(self, dados):
         logging.basicConfig(level=logging.INFO)
-        self.random_state=20080313
         self.vectorizer = TfidfVectorizer(sublinear_tf=True, min_df=5, ngram_range=(1,2))
-        dados.treino, dados.teste = train_test_split(dados.prep, test_size=0.20, stratify=dados.prep['tipo_seg'], 
-                                        shuffle=True, random_state=self.random_state)
+        dados.treino, dados.teste = train_test_split(dados.prep, test_size=0.20, stratify=dados.prep['tipo_seg'],
+                                        shuffle=True)
 
     def vetorizar(self, dados):
         logging.info('Executando vetorização TF-IDF...')
