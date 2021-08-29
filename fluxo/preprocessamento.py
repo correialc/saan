@@ -7,7 +7,7 @@ from string import punctuation
 class Preprocessamento:
     
     def __init__(self):
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s", datefmt='%H:%M:%S')
         nltk.download('stopwords')
         self.stopwords = nltk.corpus.stopwords.words('portuguese')
         self.tokenizer = RegexpTokenizer(r'\w+')

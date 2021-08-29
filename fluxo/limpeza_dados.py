@@ -6,7 +6,7 @@ from html.parser import HTMLParser
 class LimpezaDados:
 
     def __init__(self, dados):
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s", datefmt='%H:%M:%S')
         dados.limp = dados.orig.copy()
 
     def remover_segmentos_nao_ade(self, dados):
@@ -66,5 +66,5 @@ class LimpezaDados:
         self.remover_segmentos_nulos(dados)
         self.remover_tags_html(dados)
         self.remover_escape_html(dados)
-        self.reclassificar_nao_identificados(dados)
+        #self.reclassificar_nao_identificados(dados)
         logging.info('Limpeza de dados concluída.')

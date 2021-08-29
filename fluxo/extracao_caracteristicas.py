@@ -5,7 +5,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 class ExtracaoCaracteristicas:
 
     def __init__(self, dados):
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s", datefmt='%H:%M:%S')
         self.vectorizer = TfidfVectorizer(sublinear_tf=True, min_df=5, ngram_range=(1,2))
         
 
