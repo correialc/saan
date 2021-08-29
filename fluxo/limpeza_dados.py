@@ -9,13 +9,13 @@ class LimpezaDados:
         logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s", datefmt='%H:%M:%S')
         dados.limp = dados.orig.copy()
 
-    def remover_segmentos_nao_ade(self, dados):
-        logging.info('Excluindo segmentos dos atos que não são ADE...')
+    def remover_segmentos_filtro_tipo_ato(self, dados, tipo_ato):
+        logging.info(f'Excluindo segmentos dos atos que não são {tipo_ato}...')
         qtd_seg = dados.limp['id_seg'].count()
-        dados.limp = dados.limp[dados.limp['tipo_ato']=='ADE'].copy()
-        qtd_seg_ade = dados.limp['id_seg'].count()
-        logging.info(f'{qtd_seg - qtd_seg_ade} segmentos de atos não ADE excluídos.')
-        logging.info(f'Restaram {qtd_seg_ade} segmentos de atos ADE.')
+        dados.limp = dados.limp[dados.limp['tipo_ato']==tipo_ato].copy()
+        qtd_seg_filtrados = dados.limp['id_seg'].count()
+        logging.info(f'{qtd_seg - qtd_seg_filtrados} segmentos de atos não {tipo_ato} excluídos.')
+        logging.info(f'Restaram {qtd_seg_filtrados} segmentos de atos {tipo_ato}.')
         
     
     def remover_segmentos_nao_representativos(self, dados):
@@ -60,8 +60,8 @@ class LimpezaDados:
         logging.info(f'{qtd_seg_reclassificaveis} segmentos reclassificados como artigos.')
         
 
-    def executar(self, dados):
-        self.remover_segmentos_nao_ade(dados)
+    def executar(self, dados, tipo_ato):
+        self.remover_segmentos_filtro_tipo_ato(dados, tipo_ato)
         self.remover_segmentos_nao_representativos(dados)
         self.remover_segmentos_nulos(dados)
         self.remover_tags_html(dados)
