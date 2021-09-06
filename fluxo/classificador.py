@@ -1,5 +1,7 @@
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.model_selection import cross_validate
+from matplotlib import pyplot as plt
 
 class Classificador:
 
@@ -29,4 +31,14 @@ class Classificador:
             'precisao': round(resultado_cv['test_precision_macro'].mean(), 4),
             'revocacao': round(resultado_cv['test_recall_macro'].mean(), 4),
             'f1': round(resultado_cv['test_f1_macro'].mean(), 4)
-        }        
+        }
+
+    def plotar_matriz_confusao(self, dados):
+        plt.rcParams.update({'font.size': 14})
+        fig, ax = plt.subplots(figsize=(20,12))
+
+        y_predito = self.estimador.predict(dados.Xte)
+        cm = confusion_matrix(dados.Yte, y_predito, labels=self.estimador.classes_)
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm,
+                                display_labels=self.estimador.classes_)
+        disp.plot(cmap='Blues', ax=ax)
