@@ -15,6 +15,7 @@ class LimpezaDados:
     def __init__(self, dados):
         logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s", datefmt='%H:%M:%S')
 
+
     def carregar_dados_originais(self, dados):
         logging.info('(Re)Carregando segmentos originais...')
         dados.limp = dados.orig.copy()
@@ -24,6 +25,7 @@ class LimpezaDados:
         qtd_seg_anexo = dados.limp[dados.limp['tipo_seg']=='Anexo']['id_seg'].count()
         dados.limp = dados.limp[dados.limp['tipo_seg']!='Anexo'].copy()
         logging.info(f'{qtd_seg_anexo} segmentos do tipo Anexo excluídos.')
+
 
     def remover_segmentos_filtro_tipo_ato(self, dados, tipo_ato):
         logging.info(f'Excluindo segmentos dos atos que não são {tipo_ato}...')
@@ -66,17 +68,25 @@ class LimpezaDados:
         dados.limp['txt_seg'] = dados.limp['txt_seg'].apply(remover_escape_chars)
         
 
-    def reclassificar_nao_identificados(self, dados):
+    def reclassificar_nao_identificados(self, dados, tipo_ato):
         logging.info('Reclassificando segmentos não identificados...')
         seg_ni = dados.limp[dados.limp['tipo_seg'] == 'Não Identificado']
-        padrao_artigo = re.compile('^\s{0,}Art[\s\.]')
-        qtd_seg_reclassificaveis = seg_ni[seg_ni['txt_seg'].str.contains(padrao_artigo)].count()['id_seg']
-        ids_reclassificaveis = seg_ni[seg_ni['txt_seg'].str.contains(padrao_artigo)]['id_seg']
-        dados.limp.loc[dados.limp['id_seg'].isin(ids_reclassificaveis), 'tipo_seg'] = 'Artigo'
-        logging.info(f'{qtd_seg_reclassificaveis} segmentos reclassificados como artigos.')
+        
+        padrao_seg = dict()
+        padrao_seg['Artigo'] = re.compile('^\s{0,}Art[\s\.]')
+        padrao_seg['Inciso'] = re.compile('^(\s{0,})(IX|IV|V?I{0,3}\s[-\.])')
+        padrao_seg['Alínea'] = re.compile('^(\s{0,})([a-z]\))')
+        padrao_seg['Parágrafo'] = re.compile('^(\s{0,})§')
+                
+        for tipo_seg, padrao in padrao_seg.items():
+            if tipo_seg in self.tipos_seg_por_tipo_ato[tipo_ato]:
+                qtd_seg_reclassificaveis = seg_ni[seg_ni['txt_seg'].str.contains(padrao)].count()['id_seg']
+                ids_reclassificaveis = seg_ni[seg_ni['txt_seg'].str.contains(padrao)]['id_seg']
+                dados.limp.loc[dados.limp['id_seg'].isin(ids_reclassificaveis), 'tipo_seg'] = tipo_seg
+                logging.info(f'{qtd_seg_reclassificaveis} segmentos reclassificados como {tipo_seg}.')
         
 
-    def executar(self, dados, tipo_ato):
+    def executar(self, dados, tipo_ato, reclassificar_nao_identificados):
         self.carregar_dados_originais(dados)
         self.remover_segmentos_nulos(dados)
         self.remover_segmentos_tipo_anexo(dados)
@@ -84,5 +94,8 @@ class LimpezaDados:
         self.remover_segmentos_nao_representativos(dados, tipo_ato)
         self.remover_tags_html(dados)
         self.remover_escape_html(dados)
-        #self.reclassificar_nao_identificados(dados)
+        
+        if reclassificar_nao_identificados:
+            self.reclassificar_nao_identificados(dados, tipo_ato)
+        
         logging.info('Limpeza de dados concluída.')
