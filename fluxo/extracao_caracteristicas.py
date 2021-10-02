@@ -13,8 +13,10 @@ class ExtracaoCaracteristicas:
         logging.info('Executando vetorização TF-IDF...')
         self.vectorizer.fit(dados.prep['texto'].to_list())
 
-        dados.treino, dados.teste = train_test_split(dados.prep, test_size=0.20, stratify=dados.prep['tipo_seg'],
-                                        shuffle=True, random_state=dados.random)
+        dados.treino, dados.teste = train_test_split(
+                                        dados.prep, test_size=0.20, 
+                                        stratify=dados.prep['tipo_seg'],
+                                        shuffle=True, random_state=dados.random_state)
 
         dados.Xtr = self.vectorizer.transform(dados.treino['texto'].to_list())
         dados.Ytr = dados.treino['tipo_seg'].to_list()
