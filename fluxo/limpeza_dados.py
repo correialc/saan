@@ -20,6 +20,13 @@ class LimpezaDados:
         logging.info('(Re)Carregando segmentos originais...')
         dados.limp = dados.orig.copy()
 
+
+    def determinar_tipos_segmento(self, dados, tipo_ato):
+        logging.info(f'Determinando tipos de segmento (labels) para atos do tipo {tipo_ato}...')
+        dados.labels = self.tipos_seg_por_tipo_ato[tipo_ato]
+        logging.info(f'Tipos de segmento para atos {tipo_ato}: {dados.labels}')
+
+
     def remover_segmentos_tipo_anexo(self, dados):
         logging.info('Removendo todos os segmentos do tipo Anexo...')
         qtd_seg_anexo = dados.limp[dados.limp['tipo_seg']=='Anexo']['id_seg'].count()
@@ -90,6 +97,7 @@ class LimpezaDados:
         self.carregar_dados_originais(dados)
         self.remover_segmentos_nulos(dados)
         self.remover_segmentos_tipo_anexo(dados)
+        self.determinar_tipos_segmento(dados, tipo_ato)
         self.remover_segmentos_filtro_tipo_ato(dados, tipo_ato)
         self.remover_segmentos_nao_representativos(dados, tipo_ato)
         self.remover_tags_html(dados)
