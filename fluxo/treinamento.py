@@ -9,14 +9,12 @@ class Treinamento:
         self.classificadores[classificador.nome] = classificador
 
     def treinar_modelos(self, dados, cv=None):
-        if not cv:
-            for nome_classificador in self.classificadores:
+        for nome_classificador in self.classificadores:
+            if not cv:
                 logging.info(f'Treinando modelo {nome_classificador}...')
-                self.classificadores[nome_classificador].treinar(dados)
-                self.classificadores[nome_classificador].calcular_metricas(dados)
+                self.classificadores[nome_classificador].treinar_sem_cv(dados)
                 logging.info(f'Treinamento do modelo {nome_classificador} concluído.')
-        else:
-            for nome_classificador in self.classificadores:
+            else:
                 logging.info(f'Treinando modelo {nome_classificador} com cross-validation...')
-                self.classificadores[nome_classificador].executar_cross_validation(dados, cv)
+                self.classificadores[nome_classificador].treinar_com_cv(dados, cv)
                 logging.info(f'Treinamento do modelo {nome_classificador} com cross-validation concluído.')
