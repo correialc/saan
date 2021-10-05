@@ -11,6 +11,7 @@ Cython==0.29.24
 dataclasses==0.8
 decorator==5.0.9
 idna==3.2
+imbalanced-learn==0.8.1
 immutables==0.15
 ipykernel==5.5.5
 ipython==7.16.1
@@ -48,6 +49,7 @@ pyzmq==22.1.0
 regex==2021.8.3
 requests==2.26.0
 rope==0.19.0
+scikit-learn==0.24.2
 scipy==1.5.4
 seaborn==0.11.1
 six==1.16.0
@@ -56,6 +58,7 @@ spacy==3.1.1
 spacy-legacy==3.0.8
 srsly==2.4.1
 thinc==8.0.8
+threadpoolctl==2.2.0
 tornado==6.1
 tqdm==4.62.0
 traitlets==4.3.3
