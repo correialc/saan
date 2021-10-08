@@ -11,6 +11,7 @@ class LimpezaDados:
         'SC': ['Ementa', 'Fecho', 'Não Identificado']
     }
 
+    tipos_seg_padrao_regex = ['Artigo', 'Parágrafo', 'Alínea', 'Inciso']
 
     def __init__(self, dados):
         logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s", datefmt='%H:%M:%S')
@@ -23,7 +24,8 @@ class LimpezaDados:
 
     def determinar_tipos_segmento(self, dados, tipo_ato):
         logging.info(f'Determinando tipos de segmento (labels) para atos do tipo {tipo_ato}...')
-        dados.labels = self.tipos_seg_por_tipo_ato[tipo_ato]
+        dados.labels = list(filter(lambda lb : lb not in self.tipos_seg_padrao_regex, 
+                                    self.tipos_seg_por_tipo_ato[tipo_ato]))
         logging.info(f'Tipos de segmento para atos {tipo_ato}: {dados.labels}')
 
 
@@ -60,7 +62,16 @@ class LimpezaDados:
         dados.limp = dados.limp[dados.limp['txt_seg'].notna()]
         logging.info(f'{qtd_seg_na} segmentos nulos excluídos.')
         logging.info(f'Restaram {qtd_seg - qtd_seg_na} segmentos não nulos.')
-        
+
+
+    def remover_segmentos_padrao_regex(self, dados):
+        logging.info('Removendo segmentos classificados através de REGEX...')
+        qtd_seg = dados.limp['id_seg'].count()
+        qtd_regex = dados.limp['tipo_seg'].isin(self.tipos_seg_padrao_regex).sum()
+        dados.limp = dados.limp[~dados.limp['tipo_seg'].isin(self.tipos_seg_padrao_regex)]
+        logging.info(f'Foram excluídos {qtd_regex} segmentos classificados por REGEX.')
+        logging.info(f'Restaram {qtd_seg - qtd_regex} segmentos.')
+
 
     def remover_tags_html(self, dados):
         logging.info('Removendo tags HTML...')
@@ -73,7 +84,7 @@ class LimpezaDados:
         logging.info('Removendo caracteres de escape HTML...')
         remover_escape_chars = lambda txt : HTMLParser().unescape(txt)
         dados.limp['txt_seg'] = dados.limp['txt_seg'].apply(remover_escape_chars)
-        
+     
 
     def reclassificar_nao_identificados(self, dados, tipo_ato):
         logging.info('Reclassificando segmentos não identificados...')
@@ -106,4 +117,5 @@ class LimpezaDados:
         if reclassificar_nao_identificados:
             self.reclassificar_nao_identificados(dados, tipo_ato)
         
+        self.remover_segmentos_padrao_regex(dados)        
         logging.info('Limpeza de dados concluída.')
