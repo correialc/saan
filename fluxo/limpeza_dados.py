@@ -81,9 +81,9 @@ class LimpezaDados:
         
         padrao_seg = dict()
         padrao_seg['Artigo'] = re.compile('^"{0,1}\s*(Art|ART)\.\s*')
-        padrao_seg['Inciso'] = re.compile('^\s*(I?X|I?V|V?I{1,3}|XV?I{1,3}|XI?V)(\s-|\s–|\.)')
-        padrao_seg['Alínea'] = re.compile('^(\s{0,})([a-z]\))')
-        padrao_seg['Parágrafo'] = re.compile('^(\s{0,})(§|Parágrafo|Paragrafo)')
+        padrao_seg['Inciso'] = re.compile('^(\s*)M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})(\s-|\s–)')
+        padrao_seg['Alínea'] = re.compile('^(\s*)([a-z]\))')
+        padrao_seg['Parágrafo'] = re.compile('^(\s*)(§|Parágrafo|Paragrafo)')
                 
         for tipo_seg, padrao in padrao_seg.items():
             if tipo_seg in self.tipos_seg_por_tipo_ato[tipo_ato]:
