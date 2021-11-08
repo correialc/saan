@@ -11,19 +11,18 @@ class Classificador:
         self.matriz_confusao = None
     
 
-    def treinar_sem_cv(self, dados):
-        self.estimador.fit(dados.Xtr, dados.Ytr)
-        y_predito = self.estimador.predict(dados.Xte)
+    def treinar_sem_cv(self, x_treino, y_treino, x_teste, y_teste, labels, metricas):
+        self.estimador.fit(x_treino, y_treino)
+        y_predito = self.estimador.predict(x_teste)
 
-        dados.metricas[self.nome] = {
-            'acuracia': round(accuracy_score(dados.Yte, y_predito),4),
-            'precisao': round(precision_score(dados.Yte, y_predito, pos_label=1, average='macro'),4),
-            'revocacao': round(recall_score(dados.Yte, y_predito, pos_label=1, average='macro'), 4),
-            'f1': round(f1_score(dados.Yte, y_predito, pos_label=1, average='macro'),4)
+        metricas[self.nome] = {
+            'acuracia': round(accuracy_score(y_teste, y_predito),4),
+            'precisao': round(precision_score(y_teste, y_predito, pos_label=1, average='macro'),4),
+            'revocacao': round(recall_score(y_teste, y_predito, pos_label=1, average='macro'), 4),
+            'f1': round(f1_score(y_teste, y_predito, pos_label=1, average='macro'),4)
             }
-
-        y_predito = self.estimador.predict(dados.Xte)
-        self.matriz_confusao = confusion_matrix(dados.Yte, y_predito, labels=dados.labels)
+        
+        self.matriz_confusao = confusion_matrix(y_teste, y_predito, labels=labels)
 
 
     def treinar_com_cv(self, dados, cv):

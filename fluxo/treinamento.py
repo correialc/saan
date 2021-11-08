@@ -12,7 +12,8 @@ class Treinamento:
         for nome_classificador in self.classificadores:
             if not cv:
                 logging.info(f'Treinando modelo {nome_classificador}...')
-                self.classificadores[nome_classificador].treinar_sem_cv(dados)
+                self.classificadores[nome_classificador].treinar_sem_cv(dados.Xtr, dados.Ytr, dados.Xte, dados.Yte, 
+                                                                        dados.labels, dados.metricas)
                 logging.info(f'Treinamento do modelo {nome_classificador} concluído.')
             else:
                 logging.info(f'Treinando modelo {nome_classificador} com cross-validation...')
