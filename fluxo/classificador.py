@@ -40,10 +40,9 @@ class Classificador:
         self.matriz_confusao = confusion_matrix(y, y_predito, labels=labels)
 
 
-    def plotar_matriz_confusao(self, dados):
+    def plotar_matriz_confusao(self, labels):
         plt.rcParams.update({'font.size': 14})
         fig, ax = plt.subplots(figsize=(20,12))
         
-        disp = ConfusionMatrixDisplay(confusion_matrix=self.matriz_confusao,
-                                display_labels=dados.labels)
+        disp = ConfusionMatrixDisplay(confusion_matrix=self.matriz_confusao, display_labels=labels)
         disp.plot(cmap='Blues', ax=ax)
