@@ -5,9 +5,15 @@ class Treinamento:
     def __init__(self):
         self.classificadores = dict()
     
+
     def adicionar_modelo(self, classificador):
         self.classificadores[classificador.nome] = classificador
 
+
+    def buscar_modelo(self, nome_classificador):
+        return self.classificadores[nome_classificador]
+
+    
     def treinar_modelos(self, dados, cv=None):
         for nome_classificador in self.classificadores:
             if not cv:
