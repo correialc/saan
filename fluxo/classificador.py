@@ -10,7 +10,11 @@ class Classificador:
         self.estimador = estimador
         self.matriz_confusao = None
     
-
+    
+    def treinar_sem_split(self, X, y):
+        self.estimador.fit(X, y)
+    
+    
     def treinar_sem_cv(self, x_treino, y_treino, x_teste, y_teste, labels, metricas):
         self.estimador.fit(x_treino, y_treino)
         y_predito = self.estimador.predict(x_teste)
