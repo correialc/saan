@@ -25,19 +25,19 @@ class Classificador:
         self.matriz_confusao = confusion_matrix(y_teste, y_predito, labels=labels)
 
 
-    def treinar_com_cv(self, dados, cv):
-        resultado_cv = cross_validate(self.estimador, dados.X, dados.y, cv=cv, 
+    def treinar_com_cv(self, X, y, labels, metricas, cv):
+        resultado_cv = cross_validate(self.estimador, X, y, cv=cv, 
                         scoring=('accuracy', 'precision_macro', 'recall_macro', 'f1_macro'))
                 
-        dados.metricas[self.nome] = {
+        metricas[self.nome] = {
             'acuracia': round(resultado_cv['test_accuracy'].mean(), 4),
             'precisao': round(resultado_cv['test_precision_macro'].mean(), 4),
             'revocacao': round(resultado_cv['test_recall_macro'].mean(), 4),
             'f1': round(resultado_cv['test_f1_macro'].mean(), 4)
         }
 
-        y_predito = cross_val_predict(self.estimador, dados.X, dados.y, cv=cv)
-        self.matriz_confusao = confusion_matrix(dados.y, y_predito, labels=dados.labels)
+        y_predito = cross_val_predict(self.estimador, X, y, cv=cv)
+        self.matriz_confusao = confusion_matrix(y, y_predito, labels=labels)
 
 
     def plotar_matriz_confusao(self, dados):

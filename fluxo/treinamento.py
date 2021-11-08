@@ -17,5 +17,5 @@ class Treinamento:
                 logging.info(f'Treinamento do modelo {nome_classificador} concluído.')
             else:
                 logging.info(f'Treinando modelo {nome_classificador} com cross-validation...')
-                self.classificadores[nome_classificador].treinar_com_cv(dados, cv)
+                self.classificadores[nome_classificador].treinar_com_cv(dados.X, dados.y, dados.labels, dados.metricas, cv)
                 logging.info(f'Treinamento do modelo {nome_classificador} com cross-validation concluído.')
