@@ -2,7 +2,6 @@ import sys
 import logging
 import pandas as pd
 from string import punctuation
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from fluxo.dados import Dados
 from fluxo.limpeza_dados import LimpezaDados
@@ -41,14 +40,6 @@ class ClassificadorSegmentos:
         dados.pred = dados.prep
         dados.pred['tipo_seg_pred'] = self.clf[tipo_ato].predict(X)
         logging.info('Classificação concluída.')
-        
-        logging.info('Calculando métricas...')
-        metricas = dict()
-        metricas['acuracia'] = round(accuracy_score(dados.pred['tipo_seg'], dados.pred['tipo_seg_pred']),4)
-        metricas['precisao'] = round(precision_score(dados.pred['tipo_seg'], dados.pred['tipo_seg_pred'], pos_label=1, average='macro'),4)
-        metricas['revocacao'] = round(recall_score(dados.pred['tipo_seg'], dados.pred['tipo_seg_pred'], pos_label=1, average='macro'), 4)
-        metricas['f1'] = round(f1_score(dados.pred['tipo_seg'], dados.pred['tipo_seg_pred'], pos_label=1, average='macro'),4)
-        logging.info('Métricas calculadas')
 
-        return dados.pred, metricas
+        return dados.pred
         
