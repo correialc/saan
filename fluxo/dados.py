@@ -5,6 +5,7 @@ class Dados:
         self.orig = []
         self.limp = []
         self.prep = []
+        self.pred = []
         self.labels = []
         self.X = []
         self.y = []
