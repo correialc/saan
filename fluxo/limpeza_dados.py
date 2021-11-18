@@ -124,9 +124,7 @@ class LimpezaDados:
     def executar_seg(self, texto_seg):
         logging.info('Removendo tags HTML...')
         padrao_tag_html = re.compile('<.*?>')
-        re.sub(padrao_tag_html, '', str(texto_seg))
-
+        texto_seg = re.sub(padrao_tag_html, '', texto_seg)
         logging.info('Removendo caracteres de escape HTML...')
-        HTMLParser().unescape(texto_seg)
-
+        texto_seg = HTMLParser().unescape(texto_seg)
         return texto_seg
