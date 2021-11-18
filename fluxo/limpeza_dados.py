@@ -13,7 +13,7 @@ class LimpezaDados:
 
     tipos_seg_padrao_regex = ['Artigo', 'Parágrafo', 'Alínea', 'Inciso']
 
-    def __init__(self, dados):
+    def __init__(self):
         logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s", datefmt='%H:%M:%S')
 
 
@@ -119,3 +119,14 @@ class LimpezaDados:
         
         self.remover_segmentos_padrao_regex(dados)        
         logging.info('Limpeza de dados concluída.')
+    
+
+    def executar_seg(self, texto_seg):
+        logging.info('Removendo tags HTML...')
+        padrao_tag_html = re.compile('<.*?>')
+        re.sub(padrao_tag_html, '', str(texto_seg))
+
+        logging.info('Removendo caracteres de escape HTML...')
+        HTMLParser().unescape(texto_seg)
+
+        return texto_seg
