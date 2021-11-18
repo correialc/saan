@@ -4,9 +4,9 @@ from string import punctuation
 
 class PersistenciaModelo:
 
-    def __init__(self):
+    def __init__(self, caminho_modelos):
         logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s", datefmt='%H:%M:%S')
-        self.caminho_modelos = './modelos/'
+        self.caminho_modelos = caminho_modelos
 
 
     def salvar_modelo(self, modelo, tipo_ato):
