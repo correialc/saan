@@ -40,3 +40,6 @@ print(texto_seg)
 vetor_seg = vet[tipo_ato].transform([texto_seg])
 print(vetor_seg.shape)
 
+# Predição
+predito = clf[tipo_ato].predict(vetor_seg)
+print(predito)
