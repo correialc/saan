@@ -27,6 +27,12 @@ vet['port'] = persistencia.carregar_vetorizador('Port.')
 tipo_ato = sys.argv[1]
 texto_seg = sys.argv[2]
 
+# Limpeza de Dados
 lp = LimpezaDados()
 texto_seg = lp.executar_seg(texto_seg)
+print(texto_seg)
 
+# Pré-Processamento
+pp = Preprocessamento()
+texto_seg = pp.executar_seg(texto_seg)
+print(texto_seg)

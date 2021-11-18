@@ -46,7 +46,23 @@ class Preprocessamento:
         logging.info(f'Removendo tokens menores que {self.tam_min_token} caracteres...')
         dados.prep['tokens'] = dados.prep['tokens'].apply(self.remover_tokens_pequenos)
         logging.info('Reconstruindo texto a partir dos tokens...')
-        dados.prep['texto'] =dados.prep['tokens'].apply(self.reconstruir_texto)
+        dados.prep['texto'] = dados.prep['tokens'].apply(self.reconstruir_texto)
         logging.info('Preprocessamento concluído.')
 
-        
+
+    def executar_seg(self, texto_seg):
+        logging.info('Convertendo caracteres para minúsculo...')
+        texto_seg = texto_seg.lower()
+        logging.info('Removendo pontuação...')
+        texto_seg = self.remover_pontuacao(texto_seg)
+        logging.info('Realizando tokenização...')
+        tokens = self.tokenizer.tokenize(texto_seg)
+        logging.info('Removendo stopwords...')
+        tokens = self.remover_stopwords(tokens)
+        logging.info(f'Removendo tokens menores que {self.tam_min_token} caracteres...')
+        tokens = self.remover_tokens_pequenos(tokens)
+        logging.info('Reconstruindo texto a partir dos tokens...')
+        texto_seg_processado = self.reconstruir_texto(tokens)
+        logging.info('Preprocessamento concluído.')
+
+        return texto_seg_processado
