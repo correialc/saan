@@ -1,7 +1,7 @@
 import pandas as pd
 import logging
 import re
-from html.parser import HTMLParser
+import html
 
 class LimpezaDados:
 
@@ -82,7 +82,7 @@ class LimpezaDados:
     
     def remover_escape_html(self, dados):
         logging.info('Removendo caracteres de escape HTML...')
-        remover_escape_chars = lambda txt : HTMLParser().unescape(txt)
+        remover_escape_chars = lambda txt : html.unescape(txt)
         dados.limp['txt_seg'] = dados.limp['txt_seg'].apply(remover_escape_chars)
      
 
@@ -126,5 +126,5 @@ class LimpezaDados:
         padrao_tag_html = re.compile('<.*?>')
         texto_seg = re.sub(padrao_tag_html, '', texto_seg)
         logging.info('Removendo caracteres de escape HTML...')
-        texto_seg = HTMLParser().unescape(texto_seg)
+        texto_seg = html.unescape(texto_seg)
         return texto_seg
