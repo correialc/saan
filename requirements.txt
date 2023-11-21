@@ -70,7 +70,7 @@ stack-data==0.2.0
 terminado==0.15.0
 threadpoolctl==3.1.0
 tinycss2==1.1.1
-tornado==6.1
+tornado==6.3.3
 tqdm==4.64.0
 traitlets==5.2.2.post1
 wcwidth==0.2.5
